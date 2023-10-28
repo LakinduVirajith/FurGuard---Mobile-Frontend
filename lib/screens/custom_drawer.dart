@@ -5,6 +5,7 @@ import 'package:my_new_project/screens/profile.dart';
 import 'PetProfile.dart';
 import 'community.dart';
 import 'geoFencing.dart';
+import 'login.dart';
 import 'lostNotices.dart';
 
 class CustomDrawer extends StatelessWidget {
@@ -40,7 +41,7 @@ class CustomDrawer extends StatelessWidget {
 
 
             const Spacer(),
-            _buildDrawerListTile(Icons.logout, 'Log Out', () {}),
+            _buildDrawerListTile(Icons.logout, 'Log Out', () => _goToLogInPage(context)),
           ],
         ),
       ),
@@ -94,6 +95,14 @@ class CustomDrawer extends StatelessWidget {
     Navigator.of(context).push(
       MaterialPageRoute(
         builder: (context) => const LostNoticesPage(),
+      ),
+    );
+  }
+
+  void _goToLogInPage(BuildContext context) {
+    Navigator.of(context).push(
+      MaterialPageRoute(
+        builder: (context) => const LoginPage(),
       ),
     );
   }

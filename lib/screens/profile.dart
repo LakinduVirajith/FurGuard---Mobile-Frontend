@@ -89,7 +89,7 @@ class ProfilePage extends StatelessWidget {
                 ),
                 const SizedBox(height: 20),
                 const Text(
-                  'Vihanga Sri Lanka',
+                  'Gimesh Sri Lanka',
                   style: TextStyle(
                       fontSize: 24,
                       fontWeight: FontWeight.bold,

@@ -2,6 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:my_new_project/screens/custom_drawer.dart';
 import 'package:my_new_project/screens/data.dart';
 
+import 'dashboard.dart';
+
 class LostNoticesPage extends StatelessWidget {
   const LostNoticesPage({Key? key});
 
@@ -150,9 +152,10 @@ class _LostPetFormState extends State<LostPetForm> {
                   minimumSize: const Size(100, 50),
                 ),
                 onPressed: () {
-                  if (_formKey.currentState!.validate()) {
-                    // Form data is valid, perform necessary actions
-                  }
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(builder: (context) => const Dashboard()),
+                  );
                 },
                 child: const Text('Submit Form'),
               ),

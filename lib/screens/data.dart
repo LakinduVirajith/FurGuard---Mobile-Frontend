@@ -47,13 +47,13 @@ class Profile {
 
 List<Profile> profiles = [
   Profile(
-    username: 'john_doe',
-    email: 'john.doe@example.com',
+    username: 'gimesh shehan',
+    email: 'gimeshshehan@gamail.com',
     mobile: '+1234567890',
-    road: 'Sample Road',
-    city: 'Sample City',
-    province: 'Sample Province',
-    password: '987456',  // Add a placeholder password for demonstration
+    road: 'Pansala Road',
+    city: 'Ingiriya',
+    province: 'Western Province',
+    password: 'gimesh',  // Add a placeholder password for demonstration
   ),
   // Add more profiles if needed
 ];

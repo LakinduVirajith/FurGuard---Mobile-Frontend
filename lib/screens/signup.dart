@@ -1,10 +1,11 @@
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:my_new_project/screens/login.dart';
+import 'package:http/http.dart' as http;
+import 'dart:convert';
 
 class SignInPage extends StatelessWidget {
   const SignInPage({super.key});
-
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -34,10 +35,11 @@ class SignInPage extends StatelessWidget {
 
 
 class SignInForm extends StatefulWidget {
-  const SignInForm({super.key});
 
+
+  const SignInForm({super.key});
   @override
-   createState() => _SignInFormState();
+  createState() => _SignInFormState();
 }
 
 class _SignInFormState extends State<SignInForm> {
@@ -46,33 +48,67 @@ class _SignInFormState extends State<SignInForm> {
   final TextEditingController _emailController = TextEditingController();
   final TextEditingController _passwordController = TextEditingController();
   final TextEditingController _repasswordController = TextEditingController();
-  final TextEditingController _roadController = TextEditingController();
-  final TextEditingController _cityController = TextEditingController();
-  final TextEditingController _provinceController = TextEditingController();
 
 
-  void _signIn() {
-    String user = _userController.text;
+  void _register() async {
+
+    String username = _userController.text;
     String mobile = _mobileController.text;
     String email = _emailController.text;
-    String road = _roadController.text;
-    String city = _cityController.text;
-    String province = _provinceController.text;
     String password = _passwordController.text;
-    String repassword = _repasswordController.text;
+    String rePwd = _repasswordController.text;
 
-    // Implement sign-in logic here
+    // Create a map to represent your data
+    final Map<String, dynamic> data = {
+      "fullName": username,
+      "password": password,
+      "email" : email,
+      "mobileNumber" : mobile,
+    };
 
-    // For demonstration, print the sign-in details
-    print('User: $user');
-    print('Mobile: $mobile');
-    print('Email: $email');
-    print('Password: $password');
-    print('Repassword: $repassword');
-    print('Road: $road');
-    print('City: $city');
-    print('Province: $province');
+    final response = await http.post(
+      Uri.parse('http://127.0.0.1:8080/user/register'),
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: json.encode(data),
+    );
 
+    if (response.statusCode == 200) {
+      // Successful login
+      final responseJson = json.decode(response.body);
+      print("Register successful: $responseJson");
+
+      // Navigate to the Dashboard or perform other actions
+      Navigator.push(
+        context,
+        MaterialPageRoute(builder: (context) => const LoginForm()),
+      );
+    } else if (password != rePwd) {
+      _showErrorDialog('Make sure the passwords are the same.');
+    } else {
+      print("Signup failed with status code ${response.statusCode}");
+    }
+  }
+
+  Future<void> _showErrorDialog(String message) async {
+    return showDialog(
+      context: context, // Make sure you have access to the context where the dialog should be shown.
+      builder: (context) {
+        return AlertDialog(
+          title: const Text('Error'),
+          content: Text(message),
+          actions: <Widget>[
+            ElevatedButton(
+              onPressed: () {
+                Navigator.of(context).pop(); // Close the dialog
+              },
+              child: const Text('OK'),
+            ),
+          ],
+        );
+      },
+    );
   }
 
   @override
@@ -216,101 +252,13 @@ class _SignInFormState extends State<SignInForm> {
               ),
             ],
           ),
-          const SizedBox(height: 10.0),
-          const Align(
-            alignment: Alignment.centerLeft,
-            child: Text("Address",
-              textAlign: TextAlign.left,
-              style: TextStyle(
-                color: Colors.white,
-                fontSize: 18.0,
-              ),
-            ),
-          ),
+
 
           const SizedBox(height: 10.0),
-          Row(
-            children: [
-              Expanded(
-                child: TextField(
-                  controller: _roadController,
-                  decoration: InputDecoration(
-                    filled: true,
-                    fillColor: const Color(0xFFA6CF6F),
-                    hintText: 'Road/Lane',
-                    contentPadding: const EdgeInsets.all(14.0),
-                    focusedBorder: OutlineInputBorder(
-                      borderSide: const BorderSide(color: Colors.white, width: 2.0),
-                      borderRadius: BorderRadius.circular(25.0),
-                    ),
-                    enabledBorder: OutlineInputBorder(
-                      borderSide: const BorderSide(color: Colors.white, width: 2.0),
-                      borderRadius: BorderRadius.circular(25.0),
-                    ),
-                  ),
-                  style: const TextStyle(
-                    color: Colors.black,
-                    fontSize: 18.0,
-                  ),
-                ),
-              ),
-              const SizedBox(width: 10.0), // Add some spacing between the text fields
-              Expanded(
-                child: TextField(
-                  controller: _provinceController,
-                  decoration: InputDecoration(
-                    filled: true,
-                    fillColor: const Color(0xFFA6CF6F),
-                    hintText: 'City',
-                    contentPadding: const EdgeInsets.all(14.0),
-                    focusedBorder: OutlineInputBorder(
-                      borderSide: const BorderSide(color: Colors.white, width: 2.0),
-                      borderRadius: BorderRadius.circular(25.0),
-                    ),
-                    enabledBorder: OutlineInputBorder(
-                      borderSide: const BorderSide(color: Colors.white, width: 2.0),
-                      borderRadius: BorderRadius.circular(25.0),
-                    ),
-                  ),
-                  style: const TextStyle(
-                    color: Colors.black,
-                    fontSize: 18.0,
-                  ),
-                ),
-              ),
-            ],
-          ),
-          const SizedBox(height: 10.0),
-          Row(
-            children: [
-              Expanded(
-                child: TextField(
-                  controller: _cityController,
-                  decoration: InputDecoration(
-                    filled: true,
-                    fillColor: const Color(0xFFA6CF6F),
-                    hintText: 'Province',
-                    contentPadding: const EdgeInsets.all(14.0),
-                    focusedBorder: OutlineInputBorder(
-                      borderSide: const BorderSide(color: Colors.white, width: 2.0),
-                      borderRadius: BorderRadius.circular(25.0),
-                    ),
-                    enabledBorder: OutlineInputBorder(
-                      borderSide: const BorderSide(color: Colors.white, width: 2.0),
-                      borderRadius: BorderRadius.circular(25.0),
-                    ),
-                  ),
-                  style: const TextStyle(
-                    color: Colors.black,
-                    fontSize: 18.0,
-                  ),
-                ),
-              ),
-            ],
-          ),
+
           const SizedBox(height: 20.0),
           ElevatedButton(
-            onPressed: _signIn,
+            onPressed: _register,
             style: ElevatedButton.styleFrom(
               backgroundColor: Colors.green,
               padding: const EdgeInsets.symmetric(horizontal: 50, vertical: 20),
@@ -324,6 +272,7 @@ class _SignInFormState extends State<SignInForm> {
             ),
             child: const Text('Sign Up'),
           ),
+
           const SizedBox(height: 10),
           RichText(
             text: TextSpan(
